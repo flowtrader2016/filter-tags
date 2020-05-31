@@ -21,7 +21,7 @@ const ShortList = ({ favourites, data, deleteFavourite }) => {
       <Tag
         id={i}
         key={i}
-        info={data[fav]}
+        info={data.find((person) => person.id === fav)}
         handleFavourite={(id) => deleteFavourite(id)}
       />
     );
