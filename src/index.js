@@ -1,6 +1,5 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import tagsArray from "./tags";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import ApolloClient from "apollo-boost";
@@ -38,13 +37,7 @@ function GQLTagFunc() {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
 
-  return data.tag.map(({ id, label }) => (
-    <div key={id}>
-      <p>
-        {id}: {label}
-      </p>
-    </div>
-  ));
+  if (data) return <App data={data.tag} />;
 }
 
 /* ############################ */
@@ -54,7 +47,6 @@ function GQLTagFunc() {
 ReactDOM.render(
   <ApolloProvider client={client}>
     <GQLTagFunc />
-    <App data={tagsArray} />
   </ApolloProvider>,
   document.getElementById("root")
 );

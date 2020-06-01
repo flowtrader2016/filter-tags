@@ -29,7 +29,9 @@ const ShortList = ({ favourites, data, deleteFavourite }) => {
   return (
     <div className="favourites">
       <h4>
-        {hasFavourites ? "Your Shortlist" : "Click on a tag to shortlist it.."}
+        {hasFavourites
+          ? "Shortlist. Click to remove.."
+          : "Click on a tag to shortlist it.."}
       </h4>
       <ul>{favList}</ul>
       {hasFavourites && <hr />}
