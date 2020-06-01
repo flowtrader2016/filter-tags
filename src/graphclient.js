@@ -9,17 +9,14 @@ const client = new ApolloClient({
 });
 
 const GQLTAGS = gql`
-  query MyQuery {
+  {
     tag(
-      distinct_on: label
-      where: {
-        label: { _nin: ["None", "null"] }
-        article_tags: { article: {}, tag: { article_tags: { tag: {} } } }
-      }
+      order_by: { tag_related_counts_aggregate: { count: desc } }
+      where: { label: { _nin: ["None", "null"] } }
     ) {
       id
       label
-      article_tags_aggregate(distinct_on: article_id) {
+      tag_related_counts_aggregate {
         aggregate {
           count
         }

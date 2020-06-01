@@ -6,7 +6,7 @@ import React, { Component } from "react";
 
 const Tag = ({ id, info, handleFavourite }) => (
   <li className={info.count} onClick={() => handleFavourite(id)}>
-    {info.label} ({info.article_tags_aggregate.aggregate.count})
+    {info.label} ({info.tag_related_counts_aggregate.aggregate.count})
   </li>
 );
 
