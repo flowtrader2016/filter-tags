@@ -6,7 +6,7 @@ import React, { Component } from "react";
 
 const Tag = ({ id, info, handleFavourite }) => (
   <li className={info.count} onClick={() => handleFavourite(id)}>
-    {info.label}
+    {info.label} ({info.article_tags_aggregate.aggregate.count})
   </li>
 );
 
@@ -21,7 +21,7 @@ const ShortList = ({ favourites, data, deleteFavourite }) => {
       <Tag
         id={i}
         key={i}
-        info={data.find((person) => person.id === fav)}
+        info={data.find((tag) => tag.id === fav)}
         handleFavourite={(id) => deleteFavourite(id)}
       />
     );
@@ -46,32 +46,32 @@ const ShortList = ({ favourites, data, deleteFavourite }) => {
 const TagsList = ({ data, filter, favourites, addFavourite }) => {
   const input = filter;
 
-  // Gather list of names
-  const names = data
-    // filtering out the names that...
-    .filter((person, i) => {
+  // Gather list of tags
+  const tags = data
+    // filtering out the tags that...
+    .filter((tag, i) => {
       return (
         // ...are already favourited
-        favourites.indexOf(person.id) === -1 &&
+        favourites.indexOf(tag.id) === -1 &&
         // ...are not matching the current search value
-        !person.label.indexOf(input)
+        !tag.label.indexOf(input)
       );
     })
     // ...output a <Name /> component for each name
-    .map((person, i) => {
-      // only display names that match current input string
+    .map((tag, i) => {
+      // only display tags that match current input string
       return (
         <Tag
-          id={person.id}
+          id={tag.id}
           key={i}
-          info={person}
+          info={tag}
           handleFavourite={(id) => addFavourite(id)}
         />
       );
     });
 
   /* ##### the component's output ##### */
-  return <ul>{names}</ul>;
+  return <ul>{tags}</ul>;
 };
 
 /* ###################### */
@@ -104,7 +104,7 @@ class Search extends Component {
 /* ##### Main app component ##### */
 /* ############################## */
 
-class App extends Component {
+class WrappedApp extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -176,4 +176,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default WrappedApp;
