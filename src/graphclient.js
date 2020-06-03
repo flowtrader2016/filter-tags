@@ -1,6 +1,5 @@
 import React from "react";
 import { gql } from "apollo-boost";
-import WrappedApp from "./WrappedApp";
 import ApolloClient from "apollo-boost";
 import { useQuery } from "@apollo/react-hooks";
 
@@ -25,13 +24,13 @@ const GQLTAGS = gql`
   }
 `;
 
-function GQLFunc() {
+function GQLFunc(props) {
   const { loading, error, data } = useQuery(GQLTAGS);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
 
-  if (data) return <WrappedApp data={data.tag} />;
+  let CallingApp = props.callingApp;
+  if (data) return <CallingApp data={data.tag} />;
 }
-
 export { client, GQLTAGS, GQLFunc };

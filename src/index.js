@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import * as serviceWorker from "./serviceWorker";
 import { ApolloProvider } from "@apollo/react-hooks";
 import { client, GQLTags, GQLFunc } from "./graphclient";
+import WrappedApp from "./WrappedApp";
 
 /* ############################ */
 /* ##### Single tag ##### */
@@ -10,7 +11,7 @@ import { client, GQLTags, GQLFunc } from "./graphclient";
 
 ReactDOM.render(
   <ApolloProvider client={client}>
-    <GQLFunc />
+    <GQLFunc callingApp={WrappedApp} />
   </ApolloProvider>,
   document.getElementById("root")
 );

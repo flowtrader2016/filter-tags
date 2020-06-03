@@ -10,6 +10,8 @@ const Tag = ({ id, info, handleFavourite }) => (
   </li>
 );
 
+const Greeting = () => <h1>Secstat</h1>;
+
 /* ##################### */
 /* ##### Shortlist ##### */
 /* ##################### */
@@ -142,6 +144,7 @@ class WrappedApp extends Component {
     return (
       <div>
         <header>
+          <Greeting />
           <Search
             filterVal={this.state.filterText}
             filterUpdate={this.filterUpdate.bind(this)}
