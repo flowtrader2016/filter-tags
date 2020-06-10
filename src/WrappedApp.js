@@ -153,7 +153,9 @@ function WrappedApp(props) {
             To reset the input field, we pass an 
             empty value to the filterUpdate method
           */}
-        {hasSearch && <button onClick={filterUpdate}>Clear Search</button>}
+        {hasSearch && (
+          <button onClick={() => filterUpdate("")}> Clear Search</button>
+        )}
       </main>
     </div>
   );
