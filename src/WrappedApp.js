@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 
 /* ############################ */
 /* ##### Single tag ##### */
@@ -39,6 +39,7 @@ const ShortList = ({ favourites, data, deleteFavourite }) => {
       {hasFavourites && <hr />}
     </div>
   );
+  console.log(favourites);
 };
 
 /* ########################### */
@@ -106,77 +107,56 @@ class Search extends Component {
 /* ##### Main app component ##### */
 /* ############################## */
 
-class WrappedApp extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      filterText: "",
-      favourites: [],
-    };
-  }
+function WrappedApp(props) {
+  const [filterText, setfilterText] = useState("");
+  const [favourites, setFavourites] = useState([]);
 
   // update filterText in state when user types
-  filterUpdate(value) {
-    this.setState({
-      filterText: value,
-    });
-  }
+  const filterUpdate = (value) => {
+    setfilterText(value);
+  };
 
   // add clicked name ID to the favourites array
-  addFavourite(id) {
-    const newSet = this.state.favourites.concat([id]);
-    this.setState({
-      favourites: newSet,
-    });
-  }
+  const addFavourite = (id) => {
+    const newSet = favourites.concat([id]);
+    setFavourites(newSet);
+  };
 
   // remove ID from the favourites array
-  deleteFavourite(id) {
-    const { favourites } = this.state;
+  const deleteFavourite = (id) => {
     const newList = [...favourites.slice(0, id), ...favourites.slice(id + 1)];
-    this.setState({
-      favourites: newList,
-    });
-  }
+    setFavourites(newList);
+  };
 
-  render() {
-    const hasSearch = this.state.filterText.length > 0;
-    return (
-      <div>
-        <header>
-          <Greeting />
-          <Search
-            filterVal={this.state.filterText}
-            filterUpdate={this.filterUpdate.bind(this)}
-          />
-        </header>
-        <main>
-          <ShortList
-            data={this.props.data}
-            favourites={this.state.favourites}
-            deleteFavourite={this.deleteFavourite.bind(this)}
-          />
+  const hasSearch = filterText.length > 0;
+  return (
+    <div>
+      <header>
+        <Greeting />
+        <Search filterVal={filterText} filterUpdate={filterUpdate} />
+      </header>
+      <main>
+        <ShortList
+          data={props.data}
+          favourites={favourites}
+          deleteFavourite={deleteFavourite}
+        />
 
-          <TagsList
-            data={this.props.data}
-            filter={this.state.filterText}
-            favourites={this.state.favourites}
-            addFavourite={this.addFavourite.bind(this)}
-          />
-          {/* 
+        <TagsList
+          data={props.data}
+          filter={filterText}
+          favourites={favourites}
+          addFavourite={addFavourite}
+        />
+        {/* 
             Show only if user has typed in search.
             To reset the input field, we pass an 
             empty value to the filterUpdate method
           */}
-          {hasSearch && (
-            <button onClick={this.filterUpdate.bind(this, "")}>
-              Clear Search
-            </button>
-          )}
-        </main>
-      </div>
-    );
-  }
+        {hasSearch && <button onClick={filterUpdate}>Clear Search</button>}
+      </main>
+    </div>
+  );
 }
 
 export default WrappedApp;
