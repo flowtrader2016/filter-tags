@@ -1,8 +1,6 @@
 import React, { Component, useState } from "react";
 
-/* ############################ */
 /* ##### Single tag ##### */
-/* ############################ */
 
 const Tag = ({ id, info, handleFavourite }) => (
   <li className={info.count} onClick={() => handleFavourite(id)}>
@@ -10,11 +8,7 @@ const Tag = ({ id, info, handleFavourite }) => (
   </li>
 );
 
-const Greeting = () => <h1>Secstat</h1>;
-
-/* ##################### */
 /* ##### Shortlist ##### */
-/* ##################### */
 
 const ShortList = ({ favourites, data, deleteFavourite }) => {
   const hasFavourites = favourites.length > 0;
@@ -42,27 +36,14 @@ const ShortList = ({ favourites, data, deleteFavourite }) => {
   console.log(favourites);
 };
 
-/* ########################### */
 /* ##### Tag list ##### */
-/* ########################### */
 
-const TagsList = ({ data, filter, favourites, addFavourite }) => {
-  const input = filter;
-
+const TagsList = ({ data, addFavourite }) => {
   // Gather list of tags
   const tags = data
     // filtering out the tags that...
-    .filter((tag, i) => {
-      return (
-        // ...are already favourited
-        favourites.indexOf(tag.id) === -1 &&
-        // ...are not matching the current search value
-        !tag.label.indexOf(input)
-      );
-    })
-    // ...output a <Name /> component for each name
+
     .map((tag, i) => {
-      // only display tags that match current input string
       return (
         <Tag
           id={tag.id}
@@ -77,18 +58,10 @@ const TagsList = ({ data, filter, favourites, addFavourite }) => {
   return <ul>{tags}</ul>;
 };
 
-/* ############################## */
 /* ##### Main app component ##### */
-/* ############################## */
 
 function WrappedApp(props) {
-  const [filterText, setfilterText] = useState("");
   const [favourites, setFavourites] = useState([]);
-
-  // update filterText in state when user types
-  const filterUpdate = (value) => {
-    setfilterText(value);
-  };
 
   // add clicked name ID to the favourites array
   const addFavourite = (id) => {
@@ -113,7 +86,6 @@ function WrappedApp(props) {
 
         <TagsList
           data={props.data}
-          filter={filterText}
           favourites={favourites}
           addFavourite={addFavourite}
         />
