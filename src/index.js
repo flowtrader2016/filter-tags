@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import * as serviceWorker from "./serviceWorker";
 import { ApolloProvider } from "@apollo/react-hooks";
-import { client, GQLTags, GQLFunc } from "./graphclient";
+import { client, GQLFunc } from "./graphclient";
 import WrappedApp from "./WrappedApp";
 
 /* ############################ */

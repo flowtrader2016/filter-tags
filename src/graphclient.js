@@ -2,6 +2,7 @@ import React from "react";
 import { gql } from "apollo-boost";
 import ApolloClient from "apollo-boost";
 import { useQuery } from "@apollo/react-hooks";
+import WrappedApp from "./WrappedApp";
 
 const client = new ApolloClient({
   uri: "https://job-stats.herokuapp.com/v1/graphql",
@@ -24,6 +25,32 @@ const GQLTAGS = gql`
   }
 `;
 
+const GQLSIMILARTAGS = gql`
+  query($search_label: String!) {
+    tag(
+      where: { tag_related_counts: { search_label: { _eq: $search_label } } }
+      distinct_on: id
+    ) {
+      label
+      tag_related_counts {
+        count
+        other_label
+        search_label
+      }
+    }
+  }
+`;
+
+function GQLFuncSecond() {
+  const { loading, error, data } = useQuery(GQLTAGS, {
+    variables: { search_label: "security" },
+  });
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error :(</p>;
+
+  if (data) return <WrappedApp data={data.tag} />;
+}
+
 function GQLFunc(props) {
   const { loading, error, data } = useQuery(GQLTAGS);
 
@@ -33,4 +60,4 @@ function GQLFunc(props) {
   let CallingApp = props.callingApp;
   if (data) return <CallingApp data={data.tag} />;
 }
-export { client, GQLTAGS, GQLFunc };
+export { client, GQLTAGS, GQLFunc, GQLFuncSecond, GQLSIMILARTAGS };
