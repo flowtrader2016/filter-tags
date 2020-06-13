@@ -12,7 +12,14 @@ const Tag = ({ id, info, handleFavourite }) => (
 
 const SimilarTag = ({ id, info }) => <div>{console.log(info.label)}</div>;
 
-const SimpleData = ({ data, tag }) => <div>{console.log(data)}</div>;
+const SimpleData = ({ data, tag }) => (
+  <div>
+    {console.log(data[0].tag_related_counts[0].other_label)}
+    {console.log(data[0].tag_related_counts[1].other_label)}
+    {console.log(data[0].tag_related_counts[2].other_label)}
+    {console.log(data[0].tag_related_counts[3].other_label)}
+  </div>
+);
 
 /* ##### Shortlist ##### */
 
@@ -71,9 +78,9 @@ const TagsList = ({ data, addFavourite }) => {
 function WrappedApp(props) {
   const [favourites, setFavourites] = useState([]);
 
-  function GQLFuncSecond() {
+  function GQLFuncSecond(props) {
     const { loading, error, data } = useQuery(GQLSIMILARTAGS, {
-      variables: { search_label: "security" },
+      variables: { search_label: props.searchLabel },
     });
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error :(</p>;
@@ -108,7 +115,7 @@ function WrappedApp(props) {
           addFavourite={addFavourite}
         />
 
-        <GQLFuncSecond />
+        <GQLFuncSecond searchLabel={"network security"} />
       </main>
     </div>
   );

@@ -32,7 +32,7 @@ const GQLSIMILARTAGS = gql`
       distinct_on: id
     ) {
       label
-      tag_related_counts {
+      tag_related_counts(order_by: { count: desc }) {
         count
         other_label
         search_label
