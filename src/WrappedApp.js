@@ -77,32 +77,6 @@ const TagsList = ({ data, filter, favourites, addFavourite }) => {
   return <ul>{tags}</ul>;
 };
 
-/* ###################### */
-/* ##### Search bar ##### */
-/* ###################### */
-
-// need a component class here
-// since we are using `refs`
-class Search extends Component {
-  render() {
-    const { filterVal, filterUpdate } = this.props;
-    return (
-      <form>
-        <input
-          type="text"
-          ref="filterInput"
-          placeholder="Type to filter.."
-          // binding the input value to state
-          value={filterVal}
-          onChange={() => {
-            filterUpdate(this.refs.filterInput.value);
-          }}
-        />
-      </form>
-    );
-  }
-}
-
 /* ############################## */
 /* ##### Main app component ##### */
 /* ############################## */
@@ -128,13 +102,8 @@ function WrappedApp(props) {
     setFavourites(newList);
   };
 
-  const hasSearch = filterText.length > 0;
   return (
     <div>
-      <header>
-        <Greeting />
-        <Search filterVal={filterText} filterUpdate={filterUpdate} />
-      </header>
       <main>
         <ShortList
           data={props.data}
@@ -148,14 +117,6 @@ function WrappedApp(props) {
           favourites={favourites}
           addFavourite={addFavourite}
         />
-        {/* 
-            Show only if user has typed in search.
-            To reset the input field, we pass an 
-            empty value to the filterUpdate method
-          */}
-        {hasSearch && (
-          <button onClick={() => filterUpdate("")}> Clear Search</button>
-        )}
       </main>
     </div>
   );
