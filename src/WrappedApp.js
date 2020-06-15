@@ -10,7 +10,13 @@ const Tag = ({ id, info, handleFavourite }) => (
   </li>
 );
 
-const SimilarTag = ({ id, info }) => <div>{console.log(info.label)}</div>;
+const SimilarTag = ({ id, info, addstrFavourite }) => (
+  <div>{console.log(info.label)}</div>
+);
+
+/*const SimilarTag = ({ id, info, addstrFavourite }) => (
+  <div>{addstrFavourite(info.label)}</div>
+);*/
 
 const SimpleData = ({ data, tag }) => (
   <div>
@@ -23,19 +29,18 @@ const SimpleData = ({ data, tag }) => (
 
 /* ##### Shortlist ##### */
 
-const ShortList = ({ favourites, data, deleteFavourite }) => {
+const ShortList = ({ favourites, data, addstrFavourite }) => {
   const hasFavourites = favourites.length > 0;
   const favList = favourites.map((fav, i) => {
     return (
-      <Fragment>
-        <Tag
-          id={i}
-          key={i}
-          info={data.find((tag) => tag.id === fav)}
-          handleFavourite={(id) => deleteFavourite(id)}
-        />
-        <SimilarTag id={i} key={i} info={data.find((tag) => tag.id === fav)} />
-      </Fragment>
+      <Tag
+        id={i}
+        key={i}
+        info={data.find((tag) => tag.id === fav)}
+        handleFavourite={(id) =>
+          addstrFavourite(data.find((tag) => tag.id === fav))
+        }
+      />
     );
   });
   return (
@@ -77,6 +82,7 @@ const TagsList = ({ data, addFavourite }) => {
 
 function WrappedApp(props) {
   const [favourites, setFavourites] = useState([]);
+  const [strfavourites, setstrFavourites] = useState([]);
 
   function GQLFuncSecond(props) {
     const { loading, error, data } = useQuery(GQLSIMILARTAGS, {
@@ -94,11 +100,19 @@ function WrappedApp(props) {
     setFavourites(newSet);
   };
 
+  // add clicked name  to the favourites array
+  const addstrFavourite = (id) => {
+    const newSet = strfavourites.concat([id]);
+    setstrFavourites(newSet);
+  };
+
   // remove ID from the favourites array
   const deleteFavourite = (id) => {
     const newList = [...favourites.slice(0, id), ...favourites.slice(id + 1)];
     setFavourites(newList);
   };
+
+  const hasstrFavourites = strfavourites.length > 0;
 
   return (
     <div>
@@ -106,7 +120,7 @@ function WrappedApp(props) {
         <ShortList
           data={props.data}
           favourites={favourites}
-          deleteFavourite={deleteFavourite}
+          addstrFavourite={addstrFavourite}
         />
 
         <TagsList
@@ -115,7 +129,9 @@ function WrappedApp(props) {
           addFavourite={addFavourite}
         />
 
-        <GQLFuncSecond searchLabel={"network security"} />
+        {hasstrFavourites && (
+          <GQLFuncSecond searchLabel={strfavourites[0].label} />
+        )}
       </main>
     </div>
   );
