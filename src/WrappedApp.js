@@ -10,21 +10,17 @@ const Tag = ({ id, info, handleFavourite }) => (
   </li>
 );
 
-const SimilarTag = ({ id, info, addstrFavourite }) => (
-  <div>{console.log(info.label)}</div>
-);
-
 /*map results and slice only 5 items*/
 
-const SimpleData = ({ data, tag }) => (
+const SimilarTags = ({ data, tag }) => (
   <div>
-    {console.log(
-      "Tags related to " + data[0].tag_related_counts[0].search_label
-    )}
-    {data[0].tag_related_counts.slice(0, 5).map(function (d) {
-      return console.log(d.other_label);
-    })}
-    } )
+    <b>Tags related to {data[0].tag_related_counts[0].search_label}</b>
+    <ul>
+      {data[0].tag_related_counts.slice(0, 5).map(function (d) {
+        return <li key={d.other_label}>{d.other_label}</li>;
+      })}
+    </ul>
+    <hr />
   </div>
 );
 
@@ -48,7 +44,7 @@ const ShortList = ({ favourites, data, addstrFavourite }) => {
     <div className="favourites">
       <h4>
         {hasFavourites
-          ? "Shortlist. Click to remove.."
+          ? "Shortlist. Click to find similar tags.."
           : "Click on a tag to shortlist it.."}
       </h4>
       <ul>{favList}</ul>
@@ -92,7 +88,7 @@ function WrappedApp(props) {
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error :(</p>;
 
-    if (data) return <SimpleData data={data.tag} />;
+    if (data) return <SimilarTags data={data.tag} />;
   }
 
   // add clicked name ID to the favourites array
@@ -119,6 +115,10 @@ function WrappedApp(props) {
   return (
     <div>
       <main>
+        {hasstrFavourites &&
+          strfavourites.map(function (d) {
+            return <GQLFuncSecond key={d.label} searchLabel={d.label} />;
+          })}
         <ShortList
           data={props.data}
           favourites={favourites}
@@ -130,11 +130,6 @@ function WrappedApp(props) {
           favourites={favourites}
           addFavourite={addFavourite}
         />
-
-        {hasstrFavourites &&
-          strfavourites.map(function (d) {
-            return <GQLFuncSecond key={d.label} searchLabel={d.label} />;
-          })}
       </main>
     </div>
   );
