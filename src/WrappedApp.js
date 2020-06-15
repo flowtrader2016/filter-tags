@@ -14,16 +14,17 @@ const SimilarTag = ({ id, info, addstrFavourite }) => (
   <div>{console.log(info.label)}</div>
 );
 
-/*const SimilarTag = ({ id, info, addstrFavourite }) => (
-  <div>{addstrFavourite(info.label)}</div>
-);*/
+/*map results and slice only 5 items*/
 
 const SimpleData = ({ data, tag }) => (
   <div>
-    {console.log(data[0].tag_related_counts[0].other_label)}
-    {console.log(data[0].tag_related_counts[1].other_label)}
-    {console.log(data[0].tag_related_counts[2].other_label)}
-    {console.log(data[0].tag_related_counts[3].other_label)}
+    {console.log(
+      "Tags related to " + data[0].tag_related_counts[0].search_label
+    )}
+    {data[0].tag_related_counts.slice(0, 5).map(function (d) {
+      return console.log(d.other_label);
+    })}
+    } )
   </div>
 );
 
@@ -103,8 +104,8 @@ function WrappedApp(props) {
   // add clicked name  to the favourites array
   const addstrFavourite = (id) => {
     const newSet = strfavourites.concat([id]);
+
     setstrFavourites(newSet);
-    console.log(strfavourites);
   };
 
   // remove ID from the favourites array
