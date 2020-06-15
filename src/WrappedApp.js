@@ -104,6 +104,7 @@ function WrappedApp(props) {
   const addstrFavourite = (id) => {
     const newSet = strfavourites.concat([id]);
     setstrFavourites(newSet);
+    console.log(strfavourites);
   };
 
   // remove ID from the favourites array
@@ -129,9 +130,10 @@ function WrappedApp(props) {
           addFavourite={addFavourite}
         />
 
-        {hasstrFavourites && (
-          <GQLFuncSecond searchLabel={strfavourites[0].label} />
-        )}
+        {hasstrFavourites &&
+          strfavourites.map(function (d) {
+            return <GQLFuncSecond key={d.label} searchLabel={d.label} />;
+          })}
       </main>
     </div>
   );
