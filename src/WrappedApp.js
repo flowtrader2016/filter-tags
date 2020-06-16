@@ -1,6 +1,8 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, Component } from "react";
 import { useQuery } from "@apollo/react-hooks";
 import { GQLSIMILARTAGS } from "./graphclient";
+
+const Greeting = () => <h1>Secstat</h1>;
 
 /* ##### Single tag ##### */
 
@@ -55,10 +57,20 @@ const ShortList = ({ favourites, data, addstrFavourite }) => {
 
 /* ##### Tag list ##### */
 
-const TagsList = ({ data, addFavourite }) => {
+const TagsList = ({ data, filter, favourites, addFavourite }) => {
+  const input = filter;
   // Gather list of tags
   const tags = data
     // filtering out the tags that...
+    .filter((tag, i) => {
+      return (
+        // ...are already favourited
+        favourites.indexOf(tag.id) === -1 &&
+        // ...are not matching the current search value
+        !tag.label.indexOf(input)
+      );
+    })
+    // ...output a <Name /> component for each name
 
     .map((tag, i) => {
       return (
@@ -75,11 +87,43 @@ const TagsList = ({ data, addFavourite }) => {
   return <ul>{tags}</ul>;
 };
 
+/* ###################### */
+/* ##### Search bar ##### */
+/* ###################### */
+
+// need a component class here
+// since we are using `refs`
+class Search extends Component {
+  render() {
+    const { filterVal, filterUpdate } = this.props;
+    return (
+      <form>
+        <input
+          type="text"
+          ref="filterInput"
+          placeholder="Type to filter.."
+          // binding the input value to state
+          value={filterVal}
+          onChange={() => {
+            filterUpdate(this.refs.filterInput.value);
+          }}
+        />
+      </form>
+    );
+  }
+}
+
 /* ##### Main app component ##### */
 
 function WrappedApp(props) {
+  const [filterText, setfilterText] = useState("");
   const [favourites, setFavourites] = useState([]);
   const [strfavourites, setstrFavourites] = useState([]);
+
+  // update filterText in state when user types
+  const filterUpdate = (value) => {
+    setfilterText(value);
+  };
 
   function GQLFuncSecond(props) {
     const { loading, error, data } = useQuery(GQLSIMILARTAGS, {
@@ -111,10 +155,13 @@ function WrappedApp(props) {
   };
 
   const hasstrFavourites = strfavourites.length > 0;
+  const hasSearch = filterText.length > 0;
 
   return (
     <div>
       <main>
+        <Greeting />
+        <Search filterVal={filterText} filterUpdate={filterUpdate} />
         {hasstrFavourites &&
           strfavourites.map(function (d) {
             return <GQLFuncSecond key={d.label} searchLabel={d.label} />;
@@ -128,8 +175,18 @@ function WrappedApp(props) {
         <TagsList
           data={props.data}
           favourites={favourites}
+          filter={filterText}
           addFavourite={addFavourite}
         />
+
+        {/* 		
+            Show only if user has typed in search.		
+            To reset the input field, we pass an 		
+            empty value to the filterUpdate method		
+          */}
+        {hasSearch && (
+          <button onClick={() => filterUpdate("")}> Clear Search</button>
+        )}
       </main>
     </div>
   );
