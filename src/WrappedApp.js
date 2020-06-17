@@ -125,6 +125,11 @@ function WrappedApp(props) {
     setfilterText(value);
   };
 
+  // update filterText in state when user types
+  const strfavouritesUpdate = (value) => {
+    setstrFavourites(value);
+  };
+
   function GQLFuncSecond(props) {
     const { loading, error, data } = useQuery(GQLSIMILARTAGS, {
       variables: { search_label: props.searchLabel },
@@ -161,11 +166,22 @@ function WrappedApp(props) {
     <div>
       <main>
         <Greeting />
+
+        {hasSearch && (
+          <button onClick={() => filterUpdate("")}> Clear Search</button>
+        )}
+
         <Search filterVal={filterText} filterUpdate={filterUpdate} />
+
+        {hasstrFavourites && (
+          <button onClick={() => strfavouritesUpdate([])}> Clear Favs</button>
+        )}
+
         {hasstrFavourites &&
           strfavourites.map(function (d) {
             return <GQLFuncSecond key={d.label} searchLabel={d.label} />;
           })}
+
         <ShortList
           data={props.data}
           favourites={favourites}
@@ -184,9 +200,6 @@ function WrappedApp(props) {
             To reset the input field, we pass an 		
             empty value to the filterUpdate method		
           */}
-        {hasSearch && (
-          <button onClick={() => filterUpdate("")}> Clear Search</button>
-        )}
       </main>
     </div>
   );
