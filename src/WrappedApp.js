@@ -16,6 +16,7 @@ const Tag = ({ id, info, handleFavourite }) => (
 
 const SimilarTags = ({ data, tag }) => (
   <div>
+    <br />
     <b>Tags related to {data[0].tag_related_counts[0].search_label}</b>
     <ul>
       {data[0].tag_related_counts.slice(0, 5).map(function (d) {
@@ -98,6 +99,7 @@ class Search extends Component {
     const { filterVal, filterUpdate } = this.props;
     return (
       <form>
+        <br />
         <input
           type="text"
           ref="filterInput"
@@ -173,8 +175,13 @@ function WrappedApp(props) {
 
         <Search filterVal={filterText} filterUpdate={filterUpdate} />
 
+        <br />
+
         {hasstrFavourites && (
-          <button onClick={() => strfavouritesUpdate([])}> Clear Favs</button>
+          <button onClick={() => strfavouritesUpdate([])}>
+            {" "}
+            Clear related tags
+          </button>
         )}
 
         {hasstrFavourites &&
