@@ -29,7 +29,7 @@ const SimilarTags = ({ data, tag }) => (
 
 /* ##### Shortlist ##### */
 
-const ShortList = ({ favourites, data, addstrFavourite }) => {
+const ShortList = ({ favourites, data, addstrFavourite, deleteFavourite }) => {
   const hasFavourites = favourites.length > 0;
   const favList = favourites.map((fav, i) => {
     return (
@@ -51,6 +51,11 @@ const ShortList = ({ favourites, data, addstrFavourite }) => {
           : "Click on a tag to shortlist it.."}
       </h4>
       <ul>{favList}</ul>
+
+      {hasFavourites && (
+        <button onClick={() => deleteFavourite()}> Clear shortlist</button>
+      )}
+
       {hasFavourites && <hr />}
     </div>
   );
@@ -156,9 +161,8 @@ function WrappedApp(props) {
   };
 
   // remove ID from the favourites array
-  const deleteFavourite = (id) => {
-    const newList = [...favourites.slice(0, id), ...favourites.slice(id + 1)];
-    setFavourites(newList);
+  const deleteFavourite = () => {
+    setFavourites([]);
   };
 
   const hasstrFavourites = strfavourites.length > 0;
@@ -193,6 +197,7 @@ function WrappedApp(props) {
           data={props.data}
           favourites={favourites}
           addstrFavourite={addstrFavourite}
+          deleteFavourite={deleteFavourite}
         />
 
         <TagsList
