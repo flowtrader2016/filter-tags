@@ -4,6 +4,7 @@ import * as serviceWorker from "./serviceWorker";
 import { ApolloProvider } from "@apollo/react-hooks";
 import { client, GQLFunc } from "./graphclient";
 import WrappedApp from "./WrappedApp";
+import "fontsource-roboto";
 
 /* ############################ */
 /* ##### Single tag ##### */

@@ -2,6 +2,7 @@ import React, { useState, Component } from "react";
 import { useQuery } from "@apollo/react-hooks";
 import { GQLSIMILARTAGS } from "./graphclient";
 import Button from "@material-ui/core/Button";
+import "./index.css";
 
 const Greeting = () => <h1>Secstat</h1>;
 
@@ -22,7 +23,7 @@ const Tag = ({ id, info, handleFavourite }) => (
 const SimilarTags = ({ data, tag }) => (
   <div>
     <br />
-    <b>Tags related to {data[0].tag_related_counts[0].search_label}</b>
+    <b>Skills related to {data[0].tag_related_counts[0].search_label}</b>
     <ul>
       {data[0].tag_related_counts.slice(0, 5).map(function (d) {
         return (
@@ -56,13 +57,20 @@ const ShortList = ({ favourites, data, addstrFavourite, deleteFavourite }) => {
     <div className="favourites">
       <h4>
         {hasFavourites
-          ? "Shortlist. Click to find similar tags.."
-          : "Click on a tag to shortlist it.."}
+          ? "Your shortlist. Click the skill below to find related skills"
+          : "Click on a skill to shortlist it.."}
       </h4>
       <ul>{favList}</ul>
 
       {hasFavourites && (
-        <Button onClick={() => deleteFavourite()}> Clear shortlist</Button>
+        <Button
+          color="default"
+          variant="outlined"
+          onClick={() => deleteFavourite()}
+        >
+          {" "}
+          Clear shortlist
+        </Button>
       )}
 
       {hasFavourites && <hr />}
@@ -191,9 +199,13 @@ function WrappedApp(props) {
         <br />
 
         {hasstrFavourites && (
-          <Button onClick={() => strfavouritesUpdate([])}>
+          <Button
+            color="default"
+            variant="outlined"
+            onClick={() => strfavouritesUpdate([])}
+          >
             {" "}
-            Clear related tags
+            Clear these tags
           </Button>
         )}
 
