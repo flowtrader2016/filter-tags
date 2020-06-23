@@ -1,15 +1,20 @@
 import React, { useState, Component } from "react";
 import { useQuery } from "@apollo/react-hooks";
 import { GQLSIMILARTAGS } from "./graphclient";
+import Button from "@material-ui/core/Button";
 
 const Greeting = () => <h1>Secstat</h1>;
 
 /* ##### Single tag ##### */
 
 const Tag = ({ id, info, handleFavourite }) => (
-  <li className={info.count} onClick={() => handleFavourite(id)}>
-    {info.label} ({info.tag_related_counts_aggregate.aggregate.count})
-  </li>
+  <Button
+    variant="outlined"
+    color="primary"
+    onClick={() => handleFavourite(id)}
+  >
+    {info.label}
+  </Button>
 );
 
 /*map results and slice only 5 items*/
@@ -20,7 +25,11 @@ const SimilarTags = ({ data, tag }) => (
     <b>Tags related to {data[0].tag_related_counts[0].search_label}</b>
     <ul>
       {data[0].tag_related_counts.slice(0, 5).map(function (d) {
-        return <li key={d.other_label}>{d.other_label}</li>;
+        return (
+          <Button variant="outlined" color="primary" key={d.other_label}>
+            {d.other_label}
+          </Button>
+        );
       })}
     </ul>
     <hr />
@@ -53,7 +62,7 @@ const ShortList = ({ favourites, data, addstrFavourite, deleteFavourite }) => {
       <ul>{favList}</ul>
 
       {hasFavourites && (
-        <button onClick={() => deleteFavourite()}> Clear shortlist</button>
+        <Button onClick={() => deleteFavourite()}> Clear shortlist</Button>
       )}
 
       {hasFavourites && <hr />}
@@ -174,7 +183,7 @@ function WrappedApp(props) {
         <Greeting />
 
         {hasSearch && (
-          <button onClick={() => filterUpdate("")}> Clear Search</button>
+          <Button onClick={() => filterUpdate("")}> Clear Search</Button>
         )}
 
         <Search filterVal={filterText} filterUpdate={filterUpdate} />
@@ -182,10 +191,10 @@ function WrappedApp(props) {
         <br />
 
         {hasstrFavourites && (
-          <button onClick={() => strfavouritesUpdate([])}>
+          <Button onClick={() => strfavouritesUpdate([])}>
             {" "}
             Clear related tags
-          </button>
+          </Button>
         )}
 
         {hasstrFavourites &&
